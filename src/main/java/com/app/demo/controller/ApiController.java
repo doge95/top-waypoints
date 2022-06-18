@@ -25,27 +25,16 @@ public class ApiController {
     }
 
     @GetMapping("/getTopWaypoints")
-    public ArrayList<HashMap<String, Integer>> getTopWaypoints(@RequestParam String icao, @RequestParam(required = false) String sid, @RequestParam(required = false) String star){
-        ArrayList<HashMap<String, Integer>> results =  new ArrayList<>();
+    private HashMap<String, Integer> getTopWaypoints(@RequestParam String icao, @RequestParam String type){
 
-        String type = "sids";
-        List<Procedure> sidList = apiService.getProceduresByICAO(icao, type, sid);
+        List<Procedure> procedureList = apiService.getProceduresByICAO(icao, type);
 
-        type = "stars";
-        List<Procedure> starList = apiService.getProceduresByICAO(icao, type, star);
-
-        HashMap<String, Integer> sid_stats = getMaxWaypoint(sidList);
-        HashMap<String, Integer> star_stats = getMaxWaypoint(starList);
-
-        results.add(sid_stats);
-        results.add(star_stats);
-
-        return results;
+        return getMaxWaypoint(procedureList);
     }
 
 
     // get top 2 greatest values
-    public HashMap<String, Integer> getMaxWaypoint(List<Procedure> procedureList){
+    private HashMap<String, Integer> getMaxWaypoint(List<Procedure> procedureList){
         HashMap<String, Integer> results = new HashMap<>();
 
         HashMap<String, Integer> counts = countWaypoints(procedureList);
@@ -68,7 +57,7 @@ public class ApiController {
     }
 
     // count number of presences for each waypoint
-    public HashMap<String, Integer> countWaypoints(List<Procedure> procedureList){
+    private HashMap<String, Integer> countWaypoints(List<Procedure> procedureList){
         HashMap<String, Integer> results = new HashMap<>();
 
         for (Procedure procedure: procedureList) {

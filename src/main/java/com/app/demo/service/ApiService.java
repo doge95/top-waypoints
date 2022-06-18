@@ -43,10 +43,9 @@ public class ApiService {
         return airportList;
     }
 
-    public List<Procedure> getProceduresByICAO(String icao, String type, String name) {
+    public List<Procedure> getProceduresByICAO(String icao, String type) {
 
-        if (name == null) { name = ""; };
-        String url = API_URL + "/" + type + "/airport/" + icao + "/" + name;
+        String url = API_URL + "/" + type + "/airport/" + icao;
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("api-key", API_KEY);
