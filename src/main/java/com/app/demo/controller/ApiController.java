@@ -45,7 +45,7 @@ public class ApiController {
 
                 for (Map.Entry<String, Integer> entry : counts.entrySet()) {
                     String name = entry.getKey();
-                    if (entry.getValue() == maxValueInMap) {
+                    if (entry.getValue().intValue() == maxValueInMap) {
                         results.put(name, maxValueInMap);
                     }
                 }
