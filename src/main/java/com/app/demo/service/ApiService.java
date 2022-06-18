@@ -2,6 +2,7 @@ package com.app.demo.service;
 
 import com.app.demo.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -18,60 +19,47 @@ public class ApiService {
     @Autowired
     private RestTemplateBuilder restTemplateBuilder;
 
-    public List<User> getInfo() {
+    // inject value from application.properties
+    @Value("${api.url}")
+    private String API_URL;
 
-        String url = "http://localhost:8090/api/user/users";
+    @Value("${api.key}")
+    private String API_KEY;
+    public List<Airport> getAllAirports() {
 
-        ResponseEntity<List<User>> result = restTemplateBuilder.build().
+        String url = API_URL + "/airports";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("api-key", API_KEY);
+        HttpEntity<Object> entity = new HttpEntity<Object>(headers);
+
+        ResponseEntity<List<Airport>> result = restTemplateBuilder.build().
                 exchange(url,
-                        HttpMethod.GET, null, new ParameterizedTypeReference<List<User>>() {});
+                        HttpMethod.GET, entity, new ParameterizedTypeReference<List<Airport>>() {});
 
-        List<User> userList = new ArrayList<>();
-        userList.addAll(result.getBody());
+        List<Airport> airportList = new ArrayList<>();
+        airportList.addAll(result.getBody());
 
-        return userList;
+        return airportList;
     }
 
-    public User saveData(User requestUser) {
+    public List<Procedure> getProceduresByICAO(String icao, String type, String name) {
 
-        String url = "http://localhost:8090/api/user/addUser";
+        if (name == null) { name = ""; };
+        String url = API_URL + "/" + type + "/airport/" + icao + "/" + name;
 
-        ResponseEntity<User> result = restTemplateBuilder.build().postForEntity(url, requestUser, User.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("api-key", API_KEY);
+        HttpEntity<Object> entity = new HttpEntity<Object>(headers);
 
-        User user = new User();
-        user.setEmail(result.getBody().getEmail());
-        user.setName(result.getBody().getName());
+        ResponseEntity<List<Procedure>> result = restTemplateBuilder.build().
+                exchange(url,
+                        HttpMethod.GET, entity, new ParameterizedTypeReference<List<Procedure>>() {});
 
-        return user;
+        List<Procedure> procedureList = new ArrayList<>();
+        procedureList.addAll(result.getBody());
+
+        return procedureList;
     }
 
-    public User patchData(User requestUser, Long id) {
-
-        String url = "http://localhost:8090/api/user/patchUser/" + id;
-
-        Object result = restTemplateBuilder.build().patchForObject(url, requestUser, User.class);
-
-        User user = new User();
-
-        if(result != null) {
-            if (requestUser.getName() != null) {
-                user.setName(((User) result).getName());
-            }
-            if (requestUser.getEmail() != null) {
-                user.setEmail(((User) result).getEmail());
-            }
-        }
-        return user;
-    }
-
-    public void deleteData(Long id) {
-
-        String url = "http://localhost:8090/api/user/deleteUser/" + id;
-
-        try{
-            restTemplateBuilder.build().delete(url);
-        }catch (Exception e){
-            e.getMessage();
-        }
-    }
 }

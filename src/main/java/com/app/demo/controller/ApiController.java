@@ -8,30 +8,33 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v2/users/")
+@RequestMapping("/")
 public class ApiController {
 
     @Autowired
     private ApiService apiService;
 
-    @GetMapping("/getData")
-    public List<User> getData(){
-        return apiService.getInfo();
+    @GetMapping("/getAirports")
+    public List<Airport> getAirports(){
+        return apiService.getAllAirports();
     }
 
-    @PostMapping("/postData")
-    public User postData(@RequestBody User user){
-        return apiService.saveData(user);
+    @GetMapping("/getTopWaypoints")
+    public List<Airport> getTopWaypoints(@RequestParam String icao, @RequestParam(required = false) String sid, @RequestParam(required = false) String star){
+
+        String type = "sid";
+        List<Procedure> sidList = apiService.getProceduresByICAO(icao, type, sid);
+
+        type = "star";
+        List<Procedure> starList = apiService.getProceduresByICAO(icao, type, star);
+
+        return
     }
 
-    @PatchMapping("/patchData/{id}")
-    public User getPatchData(@RequestBody User user, @PathVariable Long id){
-        return apiService.patchData(user, id);
-    }
+    public List<Airport> count(List<Procedure> procedureList){
 
-    @DeleteMapping("/deleteData/{id}")
-    public void deleteData(@PathVariable Long id){
-        apiService.deleteData(id);
-    }
 
+
+        return
+    }
 }
