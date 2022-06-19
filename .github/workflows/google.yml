@@ -29,6 +29,7 @@ env:
   GKE_ZONE: us-east4   # TODO: update to cluster zone
   DEPLOYMENT_NAME: topwaypoints-backend # TODO: update to deployment name
   REPOSITORY: topwaypoints # TODO: update to Artifact Registry docker repository
+  CHART_REPO: helm-charts
   IMAGE: backend
   TAG: ${{ github.ref_name }}
 
@@ -76,6 +77,6 @@ jobs:
     - name: Deploy to GKE
       run: |
         gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE --project $PROJECT_ID
-        helm upgrade $DEPLOYMENT_NAME oci://$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$DEPLOYMENT_NAME --install --set image=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$TAG
+        helm upgrade $DEPLOYMENT_NAME oci://$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$CHART_REPO/$DEPLOYMENT_NAME --install --set image=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$TAG
         kubectl rollout status deployment/$DEPLOYMENT_NAME
         kubectl get services -o wide
