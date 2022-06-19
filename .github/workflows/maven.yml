@@ -8,10 +8,11 @@ on:
     branches:
       - '*'
     tags:
-      — '*'
-    pull_request:
-      branches:
-        - 'master'
+      - '*'
+  pull_request:
+    branches:
+      - 'master'
+      
 jobs:
   build_push:
     name: Java CI with Maven
