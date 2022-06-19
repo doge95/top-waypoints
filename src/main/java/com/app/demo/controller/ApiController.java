@@ -25,31 +25,41 @@ public class ApiController {
     }
 
     @GetMapping("/getTopWaypoints")
-    private HashMap<String, Integer> getTopWaypoints(@RequestParam String icao, @RequestParam String type){
-
+    private List<Statistic> getTopWaypoints(@RequestParam String icao, @RequestParam String type){
+        List<Statistic> results = new ArrayList<>();
         List<Procedure> procedureList = apiService.getProceduresByICAO(icao, type);
 
-        return getMaxWaypoint(procedureList);
+        if (!(procedureList == null || procedureList.isEmpty())) {
+            results = getMaxWaypoint(procedureList);
+        }
+
+        return results;
+
     }
 
 
     // get top 2 greatest values
-    private HashMap<String, Integer> getMaxWaypoint(List<Procedure> procedureList){
-        HashMap<String, Integer> results = new HashMap<>();
+    private List<Statistic> getMaxWaypoint(List<Procedure> procedureList){
+        List<Statistic> results = new ArrayList<>();
 
         HashMap<String, Integer> counts = countWaypoints(procedureList);
 
         for (int i = 0; i < TOP_WAYPOINTS; i++) {
             if (results.size() < 2){
                 int maxValueInMap = (Collections.max(counts.values()));
+                HashMap<String, Integer> intermediate_results = new HashMap<>();
 
                 for (Map.Entry<String, Integer> entry : counts.entrySet()) {
                     String name = entry.getKey();
                     if (entry.getValue().intValue() == maxValueInMap) {
-                        results.put(name, maxValueInMap);
+                        Statistic stat = new Statistic();
+                        stat.setName(name);
+                        stat.setCount(maxValueInMap);
+                        results.add(stat);
+                        intermediate_results.put(name, maxValueInMap);
                     }
                 }
-                counts.keySet().removeAll(results.keySet());
+                counts.keySet().removeAll(intermediate_results.keySet());
             }
         }
 
