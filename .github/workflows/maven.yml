@@ -26,6 +26,7 @@ jobs:
       run: mvn -B package --file pom.xml
 
   push:
+    needs: build
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
