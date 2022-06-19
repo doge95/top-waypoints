@@ -36,8 +36,7 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password:  ${{ secrets.DOCKER_HUB_PASSWORD }}
-      run: |
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
+      run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY }}:$(date +%s)
