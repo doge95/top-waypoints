@@ -2,15 +2,15 @@
 
 ## [Backend App](https://github.com/doge95/top-waypoints-backend)
 - Use Java [Spring RestTemplate](https://spring.io/guides/gs/rest-service/) to create the backend that consumes RESTful Web Services.
-- Use [Lombok library](https://projectlombok.org/) to faster the deployment without the need ofwriting Getters/Setters.
+- Use [Lombok library](https://projectlombok.org/) to faster the deployment without the need of writing Getters/Setters.
 - Implement MVC architecture and use "Procedure" to represent both SID and STAR for efficient code re-use.
-- Containerize the backend application with the [Dockefile](https://github.com/doge95/top-waypoints-backend/blob/master/Dockerfile).
+- Containerize the backend application with the [Dockerfile](https://github.com/doge95/top-waypoints-backend/blob/master/Dockerfile).
 
 ## [Frontend App](https://github.com/doge95/top-waypoints-frontend)
 - Use React-Bootstrap framework for the frondend.
 - Populate the airports dropdown list by calling the backend.
 - Fetch the top waypoints from the backend.
-- Containerize the frontend application with the [Dockefile](https://github.com/doge95/top-waypoints-frontend/blob/main/Dockerfile).
+- Containerize the frontend application with the [Dockerfile](https://github.com/doge95/top-waypoints-frontend/blob/main/Dockerfile).
 
 ## CI/CD with Github Actions
 ### CI Workflow
